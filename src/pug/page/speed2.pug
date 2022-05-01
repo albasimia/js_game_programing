@@ -1,0 +1,15 @@
+extends /layout/_default-layout
+
+prepend config-block
+  - page_name = 'speed2'
+
+//- append stylesheet-block
+
+append javascript-block
+  script(src=`./js/${page_name}.js`) 
+    
+
+block content-block
+  main
+    h1 #{page_name}
+    canvas(id="viewer" width="600" height="600" style="width:600px; height:600px")

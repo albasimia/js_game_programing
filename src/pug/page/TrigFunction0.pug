@@ -1,0 +1,18 @@
+extends /layout/_default-layout
+
+prepend config-block
+  - page_name = 'TrigFunction0'
+
+//- append stylesheet-block
+
+append javascript-block
+  script(src=`./js/${page_name}.js`) 
+    
+
+block content-block
+  main
+    h1 #{page_name}
+    input(id="theta" type="range" min="0" max="360" value="0")
+    | 中心角＝<span id="degree">0</span>度
+    br
+    canvas(id="graph" width="600" height="600")

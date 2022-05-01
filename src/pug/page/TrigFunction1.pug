@@ -1,0 +1,15 @@
+extends /layout/_default-layout
+
+prepend config-block
+  - page_name = 'TrigFunction1'
+
+//- append stylesheet-block
+
+append javascript-block
+  script(src=`./js/${page_name}.js`) 
+    
+
+block content-block
+  main
+    h1 #{page_name}
+    canvas(id="graph" width="600" height="600")
