@@ -1,42 +1,31 @@
-var ctx;
+var ctx, posX = 0,
+    posY = 600,
+    velocityX = 5,
+    velocityY = -20,
+    accelY = 0.5;
 
 function init() {
-    var canvas = document.getElementById("graph");
-    ctx = canvas.getContext("2d");
+    ctx = document.getElementById("viewer").getContext("2d");
+    setInterval(tick, 100);
+}
 
+function tick() {
+    posX += velocityX;
+    velocityY += accelY;
+    posY += velocityY;
+
+    if (posX > 600) posX = 0;
+    if (posY > 600) {
+        velocityY = -20;
+    }
     paint();
 }
 
-function drawLine(x0, y0, x1, y1) {
-    ctx.beginPath();
-    ctx.moveTo(x0, y0);
-    ctx.lineTo(x1, y1);
-    ctx.stroke();
-}
-
 function paint() {
-    ctx.fillStyle = "white"
-    ctx.fillRect(0, 0, 800, 800);
-
-    ctx.save();
-    ctx.translate(400, 400);
-    ctx.scale(1, -1);
-
-    ctx.strokeStyle = "blue";
-    ctx.lineWidth = 4;
-    drawLine(0, -400, 0, 400);
-    drawLine(-400, 0, 400, 0);
-
-    ctx.strokeStyle = "black";
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-
-    for (var theta = -Math.PI * 2; theta < Math.PI * 2; theta += 0.1) {
-        var x = 400 * theta / (Math.PI * 2);
-        var y = Math.sin(theta) * 300;
-        ctx.lineTo(x, y);
-    }
-    ctx.stroke();
-    ctx.restore();
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, 0, 600, 600);
+    ctx.fillStyle = "white";
+    ctx.fillRect(posX, posY, 10, 10);
+    ctx.fill();
 }
 document.querySelector('body').addEventListener('load', init())
