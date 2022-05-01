@@ -4,36 +4,49 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const routeDataMapper = require('webpack-route-data-mapper')
 const readConfig = require('read-config')
 const path = require('path')
+const glob = require("glob")
 
 // base config
 const SRC = './src'
-const DEST = './public'
+const DEST = './docs'
 const HOST = process.env.HOST || '0.0.0.0'
 const PORT = process.env.PORT || 3000
 
 const constants = readConfig(`${SRC}/constants.yml`)
-const { BASE_DIR } = constants
+const {
+    BASE_DIR
+} = constants
 
 
 // page/**/*.pug -> dist/**/*.html
 const htmlTemplates = routeDataMapper({
     baseDir: `${SRC}/pug/page`,
     src: '**/[!_]*.pug',
-    locals: Object.assign(
-        {},
-        constants,
-        {
-            meta: readConfig(`${SRC}/pug/meta.yml`)
+    locals: Object.assign({},
+        constants, {
+            meta: readConfig(`${SRC}/pug/meta.yml`),
         }
-    )
+    ),
+    options: {
+        inject: false,
+    }
 })
+// const entrys = {}
+const entries = glob.sync(`${SRC}/js/*.js`);
+const entries_obj = {}
+entries.forEach(element => {
+    entries_obj[element.replace(`${SRC}/`, '')] = element
+});
+entries_obj['css/style.css'] = `${SRC}/scss/style.scss`
 
 module.exports = {
     // エントリーファイル
-    entry: {
-        'js/script.js': `${SRC}/js/script.js`,
-        'css/style.css': `${SRC}/scss/style.scss`,
-    },
+    entry: entries_obj,
+    // entry: {
+    //     'js/script.js': `${SRC}/js/script.js`,
+    //     'js/speed0.js': `${SRC}/js/speed0.js`,
+    //     'css/style.css': `${SRC}/scss/style.scss`,
+    // },
     // 出力するディレクトリ・ファイル名などの設定
     output: {
         path: path.resolve(__dirname, DEST + BASE_DIR),
@@ -42,8 +55,7 @@ module.exports = {
     },
     module: {
         // 各ファイル形式ごとのビルド設定
-        rules: [
-            {
+        rules: [{
                 test: /\.js$/,
                 loader: 'babel-loader',
                 exclude: /(node_modules)/,
@@ -54,15 +66,13 @@ module.exports = {
             },
             {
                 test: /\.pug$/,
-                use: [
-                    {
-                        loader: 'pug-loader',
-                        options: {
-                            root: path.resolve(`${SRC}/pug/`),
-                            pretty: true,
-                        }
+                use: [{
+                    loader: 'pug-loader',
+                    options: {
+                        root: path.resolve(`${SRC}/pug/`),
+                        pretty: true,
                     }
-                ],
+                }],
             },
             {
                 test: /\.(jpe?g|png|gif|svg)$/,
@@ -74,8 +84,7 @@ module.exports = {
             {
                 test: /\.scss$/,
                 use: ExtractTextPlugin.extract({
-                    use: [
-                        {
+                    use: [{
                             loader: 'css-loader',
                             options: {
                                 importLoaders: 2,
@@ -85,7 +94,7 @@ module.exports = {
                         {
                             loader: 'sass-loader',
                             options: {
-                                includePaths: [ `${SRC}/scss` ],
+                                includePaths: [`${SRC}/scss`],
                             },
                         }
                     ]
