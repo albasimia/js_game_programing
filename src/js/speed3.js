@@ -28,4 +28,4 @@ function paint() {
     ctx.fillRect(posX, posY, 10, 10);
     ctx.fill();
 }
-document.querySelector('body').addEventListener('load', init())
+document.addEventListener('DOMContentLoaded', init);

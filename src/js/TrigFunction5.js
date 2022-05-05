@@ -41,4 +41,4 @@ function paint() {
     ctx.stroke();
     ctx.restore();
 }
-document.querySelector('body').addEventListener('load', init())
+document.addEventListener('DOMContentLoaded', init);

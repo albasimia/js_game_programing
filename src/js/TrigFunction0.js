@@ -51,5 +51,5 @@ function paint() {
 
     ctx.restore(); // コンテキストを復元    
 }
-document.querySelector('body').addEventListener('load', init())
+document.addEventListener('DOMContentLoaded', init);
 document.querySelector('#theta').addEventListener('change', update)

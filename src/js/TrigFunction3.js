@@ -1,65 +1,53 @@
-var ctx, isFlying = false,
-    timer;
-var posY = 300,
-    offset = 0,
-    speed = 10,
-    velocityY = -20,
-    accelY = 5;
+var ctx;
 
 function init() {
-    ctx = document.getElementById("viewer").getContext("2d");
-    ctx.font = "24px sans-serif";
-    onkeydown = function () {
-        isFlying = true;
-    }
-    onkeyup = function () {
-        isFlying = false;
-    }
-    timer = setInterval(tick, 100);
-}
+    var canvas = document.getElementById("graph");
+    ctx = canvas.getContext("2d");
 
-function tick() {
-    velocityY += isFlying ? -accelY : accelY;
-    posY += velocityY;
-    offset += speed;
-    if (offset % 100 == 0) {
-        speed += 2
-    }
     paint();
 }
 
-function paint() {
-    ctx.fillStyle = "green";
-    ctx.fillRect(0, 0, 600, 600);
-
-    ctx.fillStyle = "brown";
+function drawLine(x0, y0, x1, y1) {
     ctx.beginPath();
-    ctx.moveTo(0, 0);
-    for (var i = 0; i <= 600; i += 10) {
-        var up = 200 + Math.sin((i + offset) * Math.PI / 360) * 80;
-        ctx.lineTo(i, up);
-        if (i == 10 && posY < up) {
-            clearInterval(timer)
-        }
-    }
-    ctx.lineTo(600, 0);
-    ctx.fill();
-
-    ctx.fillStyle = "blue";
-    ctx.beginPath();
-    ctx.moveTo(0, 600);
-    for (var i = 0; i <= 600; i += 10) {
-        var down = 400 + Math.sin((i + offset) * Math.PI / 340) * 80;
-        ctx.lineTo(i, down);
-        if (i == 10 && posY + 10 > down) {
-            clearInterval(timer)
-        }
-    }
-    ctx.lineTo(600, 600);
-    ctx.fill();
-
-    ctx.fillStyle = "white";
-    ctx.fillRect(10, posY, 10, 10);
-    ctx.fillText(offset, 500, 50);
+    ctx.moveTo(x0, y0);
+    ctx.lineTo(x1, y1);
+    ctx.stroke();
 }
-document.querySelector('body').addEventListener('load', init())
+
+function paint() {
+    ctx.fillStyle = "white"
+    ctx.fillRect(0, 0, 800, 800);
+
+    ctx.save();
+    ctx.translate(400, 400);
+    ctx.scale(1, -1);
+
+    ctx.strokeStyle = "blue";
+    ctx.lineWidth = 4;
+    drawLine(0, -400, 0, 400);
+    drawLine(-400, 0, 400, 0);
+
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+
+    for (var theta = -Math.PI * 2; theta < Math.PI * 2; theta += 0.1) {
+        var x = 400 * theta / (Math.PI * 2);
+        var y = Math.sin(theta) * 300;
+        ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+
+
+    // ディグリー角で再現
+    ctx.strokeStyle = "red";
+    ctx.beginPath();
+    for (var deg = -360; deg <= 360; deg += 1) {
+        var x = 400 * (deg * -Math.PI / 180) / (360 * Math.PI / 180);
+        var y = Math.sin((deg * Math.PI / 180)) * -300 -50;
+        ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    ctx.restore();
+}
+document.addEventListener('DOMContentLoaded', init);

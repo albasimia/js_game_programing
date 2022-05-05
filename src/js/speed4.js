@@ -62,4 +62,4 @@ function paint() {
     ctx.fillRect(10, posY, 10, 10);
     ctx.fillText(offset, 500, 50);
 }
-document.querySelector('body').addEventListener('load', init())
+document.addEventListener('DOMContentLoaded', init);

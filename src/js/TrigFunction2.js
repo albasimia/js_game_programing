@@ -34,4 +34,4 @@ function paint() {
     }
     ctx.stroke();
 }
-document.querySelector('body').addEventListener('load', init())
+document.addEventListener('DOMContentLoaded', init);
