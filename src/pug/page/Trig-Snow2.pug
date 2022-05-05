@@ -1,0 +1,18 @@
+extends /layout/_default-layout
+
+prepend config-block
+  - page_name = 'Trig-Snow2'
+
+append stylesheet-block
+  style.
+    #snowfield {width:600px; height:600px;}
+
+append javascript-block
+  script(src=`./js/${page_name}.js`) 
+    
+
+block content-block
+  main
+    h1 #{page_name}
+    canvas(id="snowfield" width="600" height="600")
+    img(id="picture" src="img/picture1.jpg" style="display:none")

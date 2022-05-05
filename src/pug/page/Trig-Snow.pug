@@ -1,9 +1,11 @@
 extends /layout/_default-layout
 
 prepend config-block
-  - page_name = 'TrigFunction3'
+  - page_name = 'Trig-Snow'
 
-//- append stylesheet-block
+append stylesheet-block
+  style.
+    #snowfield {width:600px; height:600px;}
 
 append javascript-block
   script(src=`./js/${page_name}.js`) 
@@ -12,4 +14,4 @@ append javascript-block
 block content-block
   main
     h1 #{page_name}
-    canvas(id="graph" width="800" height="800")
+    canvas(id="snowfield" width="600" height="600")
